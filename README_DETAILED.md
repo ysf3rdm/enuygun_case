@@ -38,10 +38,10 @@ The following main technologies are used in this project:
 *   **Kubernetes:** Used for managing containerized applications.
 *   **Helm:** Used for packaging and deploying Kubernetes applications.
 *   **Horizontal Pod Autoscaler (HPA):** Automatically scales pods based on CPU utilization.
-*   **KEDA (Kubernetes Event-driven Autoscaling):** Automatically scales workloads based on various event sources (Optional).
+*   **KEDA (Kubernetes Event-driven Autoscaling):** Automatically scales workloads based on various event sources.
 *   **Prometheus:** Open-source monitoring and alerting tool used for collecting Kubernetes metrics.
 *   **Grafana:** Open-source analytics and monitoring platform used for visualizing Prometheus metrics and creating dashboards.
-*   **Istio:** A configurable open-source service mesh layer for microservices (Optional).
+*   **Istio:** A configurable open-source service mesh layer for microservices.
 
 ## File Descriptions
 
@@ -69,7 +69,7 @@ Helm charts have been used to deploy various components to Kubernetes in this pr
 
 *   **Prometheus Stack:** Prometheus and Grafana are installed using the `prometheus-community/kube-prometheus-stack` chart. Configuration is taken from the `prometheus-stack/values.yaml` file.
 *   **Istio:** Different components of Istio are installed using Istio's own Helm charts. These include the `base`, `istiod`, and `gateway` charts. These charts are fetched from the `https://istio-release.storage.googleapis.com/charts` repository.
-*   **KEDA:** KEDA is also likely installed using a Helm chart (file content was not retrieved, but this is the common method).
+*   **KEDA:** KEDA is also likely installed using a Helm chart.
 
 ### Istio and LoadBalancer
 
