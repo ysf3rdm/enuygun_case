@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: game-2048
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: game-2048
+  template:
+    metadata:
+      labels:
+        app: game-2048
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-nodepool: application-pool
+      containers:
+      - name: game-2048
+        image: alexwhen/docker-2048
+        ports:
+        - containerPort: 80
+        # KEDA için CPU requests gerekli!
+        resources:
+          requests:
+            cpu: 100m      # KEDA için gerekli
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 256Mi
+---
+# KEDA ScaledObject
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: game-2048-scaledobject
+  namespace: default
+spec:
+  # Hedef deployment
+  scaleTargetRef:
+    name: game-2048
+  
+  # Scaling limitleri
+  minReplicaCount: 1
+  maxReplicaCount: 3
+  
+  # Polling interval (30 saniye)
+  pollingInterval: 30
+  
+  # Cooldown period (5 dakika)
+  cooldownPeriod: 300
+  
+  # Scale to zero configuration (optional)
+  # If you want to scale to zero when idle, uncomment below:
+  # minReplicaCount: 0
+  # idleReplicaCount: 0  # Only use if KEDA version < 2.6
+  # scaleToZero: 
+  #   cooldownPeriod: 300
+  
+  # Triggers (CPU metriği)
+  triggers:
+  - type: cpu
+    metricType: Utilization
+    metadata:
+      # CPU kullanımı %25'in üzerinde olursa scale yap
+      value: "25"
